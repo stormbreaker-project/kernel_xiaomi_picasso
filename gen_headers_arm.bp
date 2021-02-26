@@ -246,6 +246,7 @@ gen_headers_out_arm = [
     "linux/gsmmux.h",
     "linux/gtp.h",
     "linux/hash_info.h",
+    "linux/hbtp_input.h",
     "linux/hdlc.h",
     "linux/hdlcdrv.h",
     "linux/hdreg.h",
@@ -980,15 +981,12 @@ gen_headers_out_arm = [
     "media/cam_icp.h",
     "media/cam_isp.h",
     "media/cam_isp_ife.h",
-    "media/cam_isp_tfe.h",
     "media/cam_isp_vfe.h",
     "media/cam_jpeg.h",
     "media/cam_lrme.h",
-    "media/cam_ope.h",
     "media/cam_req_mgr.h",
     "media/cam_sensor.h",
     "media/cam_sync.h",
-    "media/cam_tfe.h",
 ]
 
 genrule {
