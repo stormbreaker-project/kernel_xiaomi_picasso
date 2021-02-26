@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
  * Copyright (c) 2016-2017, Linaro Ltd
+ * Copyright (C) 2021 XiaoMi, Inc.
  * Copyright (c) 2018-2020, The Linux Foundation. All rights reserved.
  */
 
@@ -130,7 +131,6 @@ struct qcom_glink {
 	struct device *dev;
 
 	const char *name;
-
 	struct mbox_client mbox_client;
 	struct mbox_chan *mbox_chan;
 
@@ -228,6 +228,7 @@ struct glink_channel {
 
 	struct mutex intent_req_lock;
 	bool intent_req_result;
+	bool channel_ready;
 	atomic_t intent_req_comp;
 	wait_queue_head_t intent_req_event;
 };
@@ -911,7 +912,7 @@ static void qcom_glink_handle_intent_req(struct qcom_glink *glink,
 
 	ept = &channel->ept;
 	intent = qcom_glink_alloc_intent(glink, channel, size, false);
-	if (intent && ept->cb)
+	if (intent && channel->channel_ready)
 		qcom_glink_advertise_intent(glink, channel, intent);
 
 	qcom_glink_send_intent_req_ack(glink, channel, !!intent);
@@ -1423,6 +1424,8 @@ static int qcom_glink_announce_create(struct rpmsg_device *rpdev)
 
 	if (glink->intentless || !completion_done(&channel->open_ack))
 		return 0;
+
+	channel->channel_ready = true;
 
 	/*Serve any pending intent request*/
 	spin_lock_irqsave(&channel->intent_lock, flags);
@@ -2065,7 +2068,7 @@ struct qcom_glink *qcom_glink_native_probe(struct device *dev,
 	ret = devm_request_irq(dev, irq,
 			       qcom_glink_native_intr,
 			       IRQF_NO_SUSPEND | IRQF_SHARED,
-			       glink->irqname, glink);
+			       "glink->native", glink);
 	if (ret) {
 		dev_err(dev, "failed to request IRQ\n");
 		goto unregister;
