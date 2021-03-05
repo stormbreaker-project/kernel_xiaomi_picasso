@@ -1514,7 +1514,7 @@ config KRYO_PMU_WORKAROUND
 
 config BOOT_INFO
 	bool "Boot information from bootloader"
-	default y
+	default n
 	help
 	  On embedded linux device, we try to collect more information from
 	  bootloader to kernel. eg. powerup reason.
@@ -1595,7 +1595,7 @@ config FACTORY_BUILD
 
 config HWCONF_MANAGER
 	bool "Hardware configuration and monitor information"
-	default y
+	default n
 	help
 	  It provides all kinds of components configuration information and
 	  monitor values.
