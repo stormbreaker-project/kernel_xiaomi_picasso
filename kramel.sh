@@ -9,7 +9,7 @@ echo "Done"
 IMAGE=$(pwd)/out/arch/arm64/boot/zImage
 TANGGAL=$(date +"%F-%S")
 START=$(date +"%s")
-export CONFIG_PATH=$PWD/arch/arm64/configs/picasso_defconfig
+export CONFIG_PATH=$PWD/arch/arm64/configs/vendor/picasso_defconfig
 PATH="${PWD}/clang/bin:$PATH"
 export ARCH=arm64
 export KBUILD_BUILD_HOST="Drone-CI"
@@ -48,7 +48,7 @@ function finerr() {
 }
 # Compile plox
 function compile() {
-   make O=out ARCH=arm64 picasso_defconfig
+   make O=out ARCH=arm64 vendor/picasso_defconfig
        make -j$(nproc --all) O=out \
                              ARCH=arm64 \
 			     CC=clang \
