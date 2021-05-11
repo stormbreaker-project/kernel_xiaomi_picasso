@@ -1,0 +1,24 @@
+kind: pipeline
+name: picasso_kramel
+
+platform:
+  os: linux
+  arch: amd64
+
+clone:
+  depth: 1
+
+steps:
+  - name: setup&kramel
+    image: starlight2834/ci_docker:latest
+    environment:
+      BOTTOKEN:
+        from_secret: token
+      CHATID:
+        from_secret: chat_id
+    commands:
+      - mkdir kernul && cd kernul
+      - apt update && apt-get install -y build-essential bc python curl git zip ftp gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev lftp zstd wget libfl-dev clang flex bison cpio
+      - wget https://raw.githubusercontent.com/Hadenix/kernel_xiaomi_picasso-rebase/rebase-r/kramel.sh
+      - chmod +x kramel.sh
+      - bash kramel.sh
