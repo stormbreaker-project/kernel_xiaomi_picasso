@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo "Cloning dependencies"
-git clone --depth=1 https://github.com/Hadenix/kernel_xiaomi_picasso-rebase -b rebase-r kernel
+git clone --depth=1 https://github.com/stormbreaker-project/kernel_xiaomi_picasso -b rebase kernel
 cd kernel
 git clone --depth=1 https://github.com/kdrag0n/proton-clang clang
 git clone --depth=1 https://github.com/stormbreaker-project/AnyKernel3 -b picasso AnyKernel
