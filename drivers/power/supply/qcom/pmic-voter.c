@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2015-2017, 2019 The Linux Foundation. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #include <linux/debugfs.h>
@@ -107,13 +106,6 @@ static void vote_min(struct votable *votable, int client_id,
 			*eff_id = i;
 		}
 	}
-
-	if (strcmp(votable->name, "QG_WS") != 0) {
-			if(votable->votes[i].enabled)
-				pr_info("%s: val: %d\n", votable->client_strs[i],
-							votable->votes[i].value);
-	}
-
 	if (*eff_id == -EINVAL)
 		*eff_res = -EINVAL;
 }
@@ -464,7 +456,7 @@ int vote(struct votable *votable, const char *client_str, bool enabled, int val)
 		goto out;
 	}
 
-	pr_info("%s: %s,%d voting %s of val=%d\n",
+	pr_debug("%s: %s,%d voting %s of val=%d\n",
 		votable->name,
 		client_str, client_id, enabled ? "on" : "off", val);
 	switch (votable->type) {
@@ -488,14 +480,12 @@ int vote(struct votable *votable, const char *client_str, bool enabled, int val)
 	 */
 	if (!votable->voted_on
 			|| (effective_result != votable->effective_result)) {
-		if (strcmp(votable->name, "QG_WS") != 0) {
-			pr_info("%s: current vote is now %d voted by %s,%d, previous voted %d\n",
-				votable->name, effective_result,
-				get_client_str(votable, effective_id),
-				effective_id, votable->effective_result);
-		}
 		votable->effective_client_id = effective_id;
 		votable->effective_result = effective_result;
+		pr_debug("%s: effective vote is now %d voted by %s,%d\n",
+			votable->name, effective_result,
+			get_client_str(votable, effective_id),
+			effective_id);
 		if (votable->callback && !votable->force_active
 				&& (votable->override_result == -EINVAL))
 			rc = votable->callback(votable, votable->data,
